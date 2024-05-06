@@ -22,14 +22,26 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+def create_song(db: Session, song: schemas.SongCreate, user_id: int):
+    db_song = models.Song(song_name=song.song_name,song_url=song.song_url,play_count=song.play_count,created_at=song.created_at, likes_count = song.likes_count, user_id=user_id)
+    db.add(db_song)
+    db.commit()
+    db.refresh(db_song)
+    return db_song
 
 def get_items(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Item).offset(skip).limit(limit).all()
 
 
-def create_song(db: Session, song: schemas.SongCreate, user_id: int):
-    db_song = models.Song(song_name=song.song_name,song_url=song.song_url,play_count=song.play_count, likes_count = song.likes_count, owner_id=user_id)
-    db.add(db_item)
+
+
+def create_user_item(db: Session, user: schemas.User,email: str,full_name: str, profile: str,google_id: str):
+    _user =  get_user(db=db, user_id=user.user_id)
+    _user.full_name = full_name
+    _user.profile = profile
+    _user.email = email
+    _user.google_id = google_id
+    
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(_user)
+    return _user

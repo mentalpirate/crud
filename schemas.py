@@ -26,13 +26,13 @@ class SongBase(BaseModel):
     created_at: datetime
     play_count: int
     likes_count: int
-    user_id: int
-
+    
 class SongCreate(SongBase):
     pass
 
 class Song(SongBase):
     song_id: int
+    user_id: int
 
     class Config:
         orm_mode = True
