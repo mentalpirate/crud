@@ -15,6 +15,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
+
+
 def create_user(db: Session, user: schemas.UserCreate):
     db_user = models.User(email=user.email,full_name=user.full_name, profile=user.profile,google_id = user.google_id)
     db.add(db_user)
@@ -29,10 +31,11 @@ def create_song(db: Session, song: schemas.SongCreate, user_id: int):
     db.refresh(db_song)
     return db_song
 
-def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
+def get_songs(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Song).offset(skip).limit(limit).all()
 
-
+def get_song_by_user(db:Session, user_id: int):
+    return db.query(models.Song).filter(models.Song.user_id == user_id).all()
 
 
 def create_user_item(db: Session, user: schemas.User,email: str,full_name: str, profile: str,google_id: str):
@@ -45,3 +48,6 @@ def create_user_item(db: Session, user: schemas.User,email: str,full_name: str, 
     db.commit()
     db.refresh(_user)
     return _user
+
+def get_all_user(db: Session,skip,limit):
+    return db.query(models.User).offset(skip).limit(limit).all()
